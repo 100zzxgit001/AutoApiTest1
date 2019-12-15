@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClassFinder {
@@ -14,7 +15,7 @@ public class ClassFinder {
     /** 
      * 获取同一路径下所有子类或接口实现类 
      *  
-     * @param intf 
+     * @param cls
      * @return 
      * @throws IOException 
      * @throws ClassNotFoundException 
@@ -48,9 +49,9 @@ public class ClassFinder {
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+          return new ArrayList<Class<?>>();
 		}
-      return new ArrayList<Class<?>>();
-    }  
+    }
   
     /** 
      * 迭代查找类 
@@ -65,12 +66,12 @@ public class ClassFinder {
         if (!dir.exists()) {  
             return classes;  
         }  
-        for (File f : dir.listFiles()) {  
+        for (File f : dir.listFiles()) {
             if (f.isDirectory()) {  
                 classes.addAll(getClasses(f, pk + "." + f.getName()));  
             }  
             String name = f.getName();  
-            if (name.endsWith(".class")) {  
+            if (name.endsWith(".class")) {
             	try{
                 classes.add(Class.forName(pk + "." + name.substring(0, name.length() - 6)));
                 }catch(Exception ex){
@@ -79,6 +80,14 @@ public class ClassFinder {
             }  
         }  
         return classes;  
-    }  
-  
+    }
+
+    public static void main(String[] args) {
+        File file = new File("D://Demo");
+        List<Class<?>> classes = ClassFinder.getClasses(file, "D.Demo");
+        for (Class<?> aClass : classes) {
+            System.out.println(aClass.getName());
+        }
+
+    }
 }  
